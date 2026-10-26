@@ -622,3 +622,34 @@ if OCULTAR_OUTROS_JOGADORES then
 end
 
 print("[ModoBatataFPS] ativo")
+
+local Lighting = game:GetService("Lighting")
+local ativo = true
+
+local function limpar()
+    Lighting.FogStart = 1e6
+    Lighting.FogEnd = 1e6
+    Lighting.Brightness = 2
+    Lighting.ClockTime = 14
+    Lighting.GlobalShadows = false
+    Lighting.Ambient = Color3.new(1, 1, 1)
+    Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+
+    for _, v in ipairs(Lighting:GetChildren()) do
+        if v:IsA("Atmosphere") then
+            v.Density = 0
+            v.Haze = 0
+        elseif v:IsA("BlurEffect") or v:IsA("BloomEffect")
+            or v:IsA("SunRaysEffect") or v:IsA("DepthOfFieldEffect")
+            or v:IsA("ColorCorrectionEffect") then
+            v.Enabled = false
+        end
+    end
+end
+
+task.spawn(function()
+    while ativo do
+        limpar()
+        task.wait(0.5)
+    end
+end)
